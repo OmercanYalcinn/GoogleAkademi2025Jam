@@ -57,10 +57,16 @@ public class PlayerMovement : MonoBehaviour
         // For the Shooting Skill
         if (Input.GetMouseButtonDown(0))
         {
-            weapon.Fire();
+            weapon.FireBullet();
         }
         moveDirection = new Vector2(movement.x, movement.y).normalized;
         mousePosition = camEarth.ScreenToWorldPoint(Input.mousePosition);
+
+        // For the Portal Opening
+        if (Input.GetMouseButtonDown(1))
+        {
+            weapon.FirePortal();
+        }
     }
     void FixedUpdate()
     {
