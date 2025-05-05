@@ -19,6 +19,13 @@ public class PlayerMovement : MonoBehaviour
     // Slow Motion Skill Variables
     public TimeManager timeManager;
 
+    // Shooting Skill Variables
+    public Weapon weapon;
+    public Camera camEarth;
+    public Vector2 moveDirection;
+    public Vector2 mousePosition;
+    
+
     void Awake()
     {   
         // Rigidbody usage
@@ -46,6 +53,14 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Motion Slowed");
             timeManager.DoSlowMotion();
         }
+
+        // For the Shooting Skill
+        if (Input.GetMouseButtonDown(0))
+        {
+            weapon.Fire();
+        }
+        moveDirection = new Vector2(movement.x, movement.y).normalized;
+        mousePosition = camEarth.ScreenToWorldPoint(Input.mousePosition);
     }
     void FixedUpdate()
     {
@@ -56,6 +71,12 @@ public class PlayerMovement : MonoBehaviour
         
         // Player Movement is happening here - also movement.normalized helps to reduce advantage of diagonally faster movement (sqrt2 disabled)
         _rigidbody2d.MovePosition(_rigidbody2d.position + movement.normalized * movementSpeed * Time.fixedDeltaTime);
+        //_rigidbody2d.velocity = new Vector2(moveDirection.x * movementSpeed, moveDirection.y * movementSpeed);
+
+        // For the Shooting Skill
+        Vector2 aimDirection = mousePosition - _rigidbody2d.position;
+        float aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg - 90f;
+        _rigidbody2d.rotation = aimAngle;
     }
 
     private IEnumerator Dash(){
